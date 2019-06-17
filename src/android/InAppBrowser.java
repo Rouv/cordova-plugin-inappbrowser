@@ -730,6 +730,27 @@ public class InAppBrowser extends CordovaPlugin {
                 return value;
             }
 
+            private int getDisplayContentHeight() {
+                final WindowManager windowManager = cordova.getActivity().getWindowManager();
+                final Point size = new Point();
+                int screenHeight = 0, actionBarHeight = 0;
+
+                if (cordova.getActivity().getActionBar() != null) {
+                    actionBarHeight = cordova.getActivity().getActionBar().getHeight();
+                }
+
+                int contentTop = ((ViewGroup) cordova.getActivity().findViewById(android.R.id.content)).getTop();
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                    windowManager.getDefaultDisplay().getSize(size);
+                    screenHeight = size.y;
+                } else {
+                    Display d = windowManager.getDefaultDisplay();
+                    screenHeight = d.getHeight();
+                }
+                return screenHeight - contentTop - actionBarHeight;
+            }
+
             private View createCloseButton(int id){
                 View _close;
                 Resources activityRes = cordova.getActivity().getResources();
@@ -922,10 +943,20 @@ public class InAppBrowser extends CordovaPlugin {
                 View footerClose = createCloseButton(7);
                 footer.addView(footerClose);
 
+                boolean showToolbar = getShowLocationBar();
+                int webViewHeight = getDisplayContentHeight();
+
+                if (showToolbar) {
+                  webViewHeight = webViewHeight - this.dpToPixels(44);
+                }
+
+                if (showFooter) {
+                  webViewHeight = webViewHeight - footerSize;
+                }
 
                 // WebView
                 inAppWebView = new WebView(cordova.getActivity());
-                inAppWebView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+                inAppWebView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, webViewHeight));
                 inAppWebView.setId(Integer.valueOf(6));
                 // File Chooser Implemented ChromeClient
                 inAppWebView.setWebChromeClient(new InAppChromeClient(thatWebView) {
