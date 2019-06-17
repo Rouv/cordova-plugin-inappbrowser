@@ -950,7 +950,7 @@ public class InAppBrowser extends CordovaPlugin {
                 int webViewHeight = getDisplayContentHeight();
 
                 if (showToolbar) {
-                  webViewHeight = webViewHeight - this.dpToPixels(44);
+                  webViewHeight = webViewHeight - this.dpToPixels(20);
                 }
 
                 if (showFooter) {
