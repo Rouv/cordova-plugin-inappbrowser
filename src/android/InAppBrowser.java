@@ -928,6 +928,8 @@ public class InAppBrowser extends CordovaPlugin {
                 toolbar.addView(close);
 
                 // Footer
+                int footerSize = this.dpToPixels(44);
+
                 RelativeLayout footer = new RelativeLayout(cordova.getActivity());
                 int _footerColor;
                 if(footerColor != ""){
@@ -936,7 +938,7 @@ public class InAppBrowser extends CordovaPlugin {
                     _footerColor = android.graphics.Color.LTGRAY;
                 }
                 footer.setBackgroundColor(_footerColor);
-                RelativeLayout.LayoutParams footerLayout = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, this.dpToPixels(44));
+                RelativeLayout.LayoutParams footerLayout = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, footerSize);
                 footerLayout.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
                 footer.setLayoutParams(footerLayout);
                 if (closeButtonCaption != "") footer.setPadding(this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8), this.dpToPixels(8));
