@@ -701,13 +701,8 @@ public class InAppBrowser extends CordovaPlugin {
                 toolbarColor = android.graphics.Color.parseColor(toolbarColorSet);
             }
             String toolbarPositionSet = features.get(TOOLBAR_POSITION);
-            LOG.d(LOG_TAG, "features: " + features.toString());
             if (toolbarPositionSet != null) {
-                LOG.d(LOG_TAG, "toolbarPositionSet NOT null: " + toolbarPositionSet);
                 toolbarPositionTop = toolbarPositionSet.equals("top") ? true : false;
-                LOG.d(LOG_TAG, "toolbarPositionTop: " + toolbarPositionTop);
-            } else {
-                LOG.d(LOG_TAG, "toolbarPositionSet IS null");
             }
             String navigationButtonColorSet = features.get(NAVIGATION_COLOR);
             if (navigationButtonColorSet != null) {
