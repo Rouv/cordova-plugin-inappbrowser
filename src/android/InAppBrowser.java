@@ -111,6 +111,7 @@ public class InAppBrowser extends CordovaPlugin {
     private static final Boolean DEFAULT_HARDWARE_BACK = true;
     private static final String USER_WIDE_VIEW_PORT = "useWideViewPort";
     private static final String TOOLBAR_COLOR = "toolbarcolor";
+    private static final String TOOLBAR_POSITION = "toolbarposition";
     private static final String CLOSE_BUTTON_CAPTION = "closebuttoncaption";
     private static final String CLOSE_BUTTON_COLOR = "closebuttoncolor";
     private static final String LEFT_TO_RIGHT = "lefttoright";
@@ -121,7 +122,7 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String FOOTER_COLOR = "footercolor";
     private static final String BEFORELOAD = "beforeload";
 
-    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION, TOOLBAR_COLOR, NAVIGATION_COLOR, CLOSE_BUTTON_COLOR, FOOTER_COLOR);
+    private static final List customizableOptions = Arrays.asList(CLOSE_BUTTON_CAPTION, TOOLBAR_COLOR, NAVIGATION_COLOR, CLOSE_BUTTON_COLOR, FOOTER_COLOR, TOOLBAR_POSITION);
 
     private InAppBrowserDialog dialog;
     private WebView inAppWebView;
@@ -144,6 +145,7 @@ public class InAppBrowser extends CordovaPlugin {
     private String closeButtonColor = "";
     private boolean leftToRight = false;
     private int toolbarColor = android.graphics.Color.LTGRAY;
+    private boolean toolbarPositionTop = false;
     private boolean hideNavigationButtons = false;
     private String navigationButtonColor = "";
     private boolean hideUrlBar = false;
@@ -698,6 +700,15 @@ public class InAppBrowser extends CordovaPlugin {
             if (toolbarColorSet != null) {
                 toolbarColor = android.graphics.Color.parseColor(toolbarColorSet);
             }
+            String toolbarPositionSet = features.get(TOOLBAR_POSITION);
+            LOG.d(LOG_TAG, "features: " + features.toString());
+            if (toolbarPositionSet != null) {
+                LOG.d(LOG_TAG, "toolbarPositionSet NOT null: " + toolbarPositionSet);
+                toolbarPositionTop = toolbarPositionSet.equals("top") ? true : false;
+                LOG.d(LOG_TAG, "toolbarPositionTop: " + toolbarPositionTop);
+            } else {
+                LOG.d(LOG_TAG, "toolbarPositionSet IS null");
+            }
             String navigationButtonColorSet = features.get(NAVIGATION_COLOR);
             if (navigationButtonColorSet != null) {
                 navigationButtonColor = navigationButtonColorSet;
@@ -1078,8 +1089,9 @@ public class InAppBrowser extends CordovaPlugin {
                 if (!hideNavigationButtons) toolbar.addView(actionButtonContainer);
                 if (!hideUrlBar) toolbar.addView(edittext);
 
+                // Show toolbar at top
                 // Don't add the toolbar if its been disabled
-                if (getShowLocationBar()) {
+                if (getShowLocationBar() && toolbarPositionTop) {
                     // Add our toolbar to our main view/layout
                     main.addView(toolbar);
                 }
@@ -1092,6 +1104,13 @@ public class InAppBrowser extends CordovaPlugin {
                 // Don't add the footer unless it's been enabled
                 if (showFooter) {
                     webViewLayout.addView(footer);
+                }
+
+                // Show toolbar at bottom
+                // Don't add the toolbar if its been disabled
+                if (getShowLocationBar() && !toolbarPositionTop) {
+                    // Add our toolbar to our main view/layout
+                    main.addView(toolbar);
                 }
 
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
