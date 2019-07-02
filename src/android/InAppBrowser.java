@@ -1269,7 +1269,9 @@ public class InAppBrowser extends CordovaPlugin {
             }
 
             // On first URL change, initiate JS callback. Only after the beforeload event, continue.
-            if (useBeforeload && this.waitForBeforeload) {
+            if (useBeforeload) {
+                this.waitForBeforeload = true;
+
                 if(sendBeforeLoad(url, method)){
                     return true;
                 }
@@ -1364,9 +1366,6 @@ public class InAppBrowser extends CordovaPlugin {
                 }
             }
 
-            if (useBeforeload) {
-                this.waitForBeforeload = true;
-            }
             return override;
         }
 
