@@ -527,7 +527,7 @@ static CDVWKInAppBrowser* instance = nil;
     }
     else if(isTopLevelNavigation && (
            [_beforeload isEqualToString:@"yes"]
-       || ([_beforeload isEqualToString:@"get"] && [httpMethod isEqualToString:@"GET"])
+       && ([_beforeload isEqualToString:@"get"] && [httpMethod isEqualToString:@"GET"])
     // TODO comment in when POST requests are handled
     // || ([_beforeload isEqualToString:@"post"] && [httpMethod isEqualToString:@"POST"])
     )){
